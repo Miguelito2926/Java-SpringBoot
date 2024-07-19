@@ -35,7 +35,8 @@ public class EcommerceApplication {
             todosClientes.forEach(System.out::println);
 
             System.out.println("Buscando clientes");
-            clientes.findByNomeLike("Cli").forEach(System.out::println);
+           List<Cliente> clientes1 =  clientes.encontrarPorNome("Ednaldo");
+           clientes1.forEach(System.out::println);
 
             System.out.println("deletando clientes");
             clientes.findAll().forEach( c -> {

@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
+import static jdk.nashorn.internal.objects.NativeArray.forEach;
+
 @SpringBootApplication
 public class EcommerceApplication {
 
@@ -17,30 +19,30 @@ public class EcommerceApplication {
 	public CommandLineRunner init(@Autowired ClienteRepository clientes){
 		return args -> {
 			System.out.println("Salvando clientes");
-			clientes.salvar(new Cliente("Ednaldo"));
-			clientes.salvar(new Cliente("Outro Cliente"));
+			clientes.save(new Cliente("Ednaldo"));
+			clientes.save(new Cliente("Outro Cliente"));
 
-			List<Cliente> todosClientes = clientes.obterTodos();
+			List<Cliente> todosClientes = clientes.findAll();
 			todosClientes.forEach(System.out::println);
 
             System.out.println("Atualizando clientes");
             todosClientes.forEach(c -> {
                 c.setNome(c.getNome() + " atualizado.");
-                clientes.atualizar(c);
+                clientes.save(c);
             });
 
-            todosClientes = clientes.obterTodos();
+            todosClientes = clientes.findAll();
             todosClientes.forEach(System.out::println);
 
             System.out.println("Buscando clientes");
-            clientes.buscarPorNome("Cli").forEach(System.out::println);
+            clientes.findByNomeLike("Cli").forEach(System.out::println);
 
             System.out.println("deletando clientes");
-            clientes.obterTodos().forEach(c -> {
-                clientes.deletar(c);
+            clientes.findAll().forEach( c -> {
+                clientes.delete(c);
             });
 
-            todosClientes = clientes.obterTodos();
+            todosClientes = clientes.findAll();
             if(todosClientes.isEmpty()){
                 System.out.println("Nenhum cliente encontrado.");
             }else{

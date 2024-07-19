@@ -20,8 +20,9 @@ public class Cliente implements Serializable {
     @Column(length = 100)
     private String nome;
 
-    public Cliente() {
+    public Cliente(){}
 
+    public Cliente(String outroCliente) {
     }
 
     public Cliente(Long id, String nome) {

@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -18,6 +17,7 @@ public class Produto implements Serializable {
     private Long id;
 
     private String descricao;
+
     @Column(name = "preco_unitario")
     private BigDecimal preco;
 

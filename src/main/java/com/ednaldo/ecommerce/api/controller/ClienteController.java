@@ -5,7 +5,7 @@ import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,69 +13,67 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/clientes")
 public class ClienteController {
-
     @Autowired
     private ClienteRepository clienteRepository;
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> findAll() {
-        List<Cliente> list = clienteRepository.findAll();
-        return ResponseEntity.ok(list);
+    public List<Cliente> findAll() {
+        return clienteRepository.findAll();
     }
 
     //Lista com filtro
     @GetMapping(value = "/filter")
-    public ResponseEntity<List<Cliente>> filter(Cliente cliente) {
+    public List<Cliente> filter(Cliente cliente) {
         ExampleMatcher exampleMatcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         Example example = Example.of(cliente, exampleMatcher);
-        List<Cliente> lista = clienteRepository.findAll(example);
-        return ResponseEntity.ok(lista);
+        return clienteRepository.findAll(example);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Cliente> getClienteById(@PathVariable Long id) {
-        Optional<Cliente> cliente = clienteRepository.findById(id);
-
-        return cliente.isPresent() ? ResponseEntity.ok(cliente.get()) : ResponseEntity.notFound().build();
+    public Cliente getClienteById(@PathVariable Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> insert(@RequestBody Cliente cliente) {
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-        return ResponseEntity.ok(clienteSalvo);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Cliente insert(@RequestBody Cliente cliente) {
+        return clienteRepository.save(cliente);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Optional<Cliente> clienteesixste = clienteRepository.findById(id);
-        if (clienteesixste.isPresent()) {
-            clienteRepository.delete(clienteesixste.get());
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        clienteRepository.findById(id)
+                .map(cliente -> {
+                    clienteRepository.delete(cliente);
+                    return cliente;  // Precisa retornar algo para que o lambda funcione corretamente
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Object> clienteUpdate(@RequestBody Cliente cliente, @PathVariable Long id) {
-        return clienteRepository
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clienteUpdate(@RequestBody Cliente cliente, @PathVariable Long id) {
+         clienteRepository
                 .findById(id)
                 .map(clienteExistente -> {
                     cliente.setId(clienteExistente.getId());
                     clienteRepository.save(cliente);
-                    return ResponseEntity.noContent().build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+                    return clienteExistente;
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
     }
 }

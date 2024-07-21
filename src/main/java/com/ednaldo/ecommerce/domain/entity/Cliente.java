@@ -1,5 +1,7 @@
 package com.ednaldo.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,6 +24,7 @@ public class Cliente implements Serializable {
     @Column(length = 100)
     private String nome;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos = new HashSet<>();
 

@@ -1,5 +1,12 @@
 package com.ednaldo.ecommerce.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +21,13 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+
 @Entity
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -22,6 +36,7 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
@@ -32,55 +47,8 @@ public class Pedido implements Serializable {
     @Column(name = "total", precision = 7, scale = 2)
     private BigDecimal total;
 
+    @Getter
     @OneToMany(mappedBy = "pedido")
     private Set<ItemPedido> itemPedidos = new HashSet<>();
 
-    public Set<ItemPedido> getItemPedidos() {
-        return itemPedidos;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Pedido setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public Pedido setCliente(Cliente cliente) {
-        this.cliente = cliente;
-        return this;
-    }
-
-    public LocalDate getDataPedido() {
-        return dataPedido;
-    }
-
-    public Pedido setDataPedido(LocalDate dataPedido) {
-        this.dataPedido = dataPedido;
-        return this;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    public Pedido setTotal(BigDecimal total) {
-        this.total = total;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", dataPedido=" + dataPedido +
-                ", total=" + total +
-                '}';
-    }
 }

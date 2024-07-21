@@ -1,5 +1,12 @@
 package com.ednaldo.ecommerce.domain.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +14,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigDecimal;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 
 @Entity
 public class Produto implements Serializable {
@@ -21,30 +34,4 @@ public class Produto implements Serializable {
     @Column(name = "preco_unitario")
     private BigDecimal preco;
 
-    public Long getId() {
-        return id;
-    }
-
-    public Produto setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public Produto setDescricao(String descricao) {
-        this.descricao = descricao;
-        return this;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public Produto setPreco(BigDecimal preco) {
-        this.preco = preco;
-        return this;
-    }
 }

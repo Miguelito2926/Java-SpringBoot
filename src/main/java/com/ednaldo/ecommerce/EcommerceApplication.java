@@ -20,7 +20,7 @@ import java.util.List;
 public class EcommerceApplication {
 
     @Bean
-    public CommandLineRunner init(@Autowired ClienteRepository clienteRepository, @Autowired PedidoRepository pedidoRepository) {
+    public CommandLineRunner init(@Autowired ClienteRepository clienteRepository) {
         return new CommandLineRunner() {
             @Override
             @Transactional
@@ -29,21 +29,6 @@ public class EcommerceApplication {
                 Cliente ednaldo = new Cliente(null, "Ednaldo");
                 clienteRepository.save(ednaldo);
 
-                Pedido pedido = new Pedido();
-                pedido.setCliente(ednaldo);
-                pedido.setDataPedido(LocalDate.now());
-                pedido.setTotal(BigDecimal.valueOf(250));
-                pedidoRepository.save(pedido);
-
-//                Cliente cliente1 = clienteRepository.findClienteFetchPedidos(ednaldo.getId());
-//                cliente1.getPedidos().size(); // Forçar a inicialização da coleção
-//                System.out.println(cliente1);
-//                System.out.println(cliente1.getPedidos());
-                pedidoRepository.findByCliente(ednaldo).forEach(System.out::println);
-
-                System.out.println("Buscando clientes");
-                List<Cliente> clientes1 = clienteRepository.encontrarPorNome("Ednaldo");
-                clientes1.forEach(System.out::println);
             }
         };
     }

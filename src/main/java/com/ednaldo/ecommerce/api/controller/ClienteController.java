@@ -3,6 +3,8 @@ package com.ednaldo.ecommerce.api.controller;
 import com.ednaldo.ecommerce.domain.entity.Cliente;
 import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,19 @@ public class ClienteController {
     public ResponseEntity<List<Cliente>> findAll() {
         List<Cliente> list = clienteRepository.findAll();
         return ResponseEntity.ok(list);
+    }
+
+    //Lista com filtro
+    @GetMapping(value = "/filter")
+    public ResponseEntity<List<Cliente>> filter(Cliente cliente) {
+        ExampleMatcher exampleMatcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        Example example = Example.of(cliente, exampleMatcher);
+        List<Cliente> lista = clienteRepository.findAll(example);
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping(value = "/{id}")

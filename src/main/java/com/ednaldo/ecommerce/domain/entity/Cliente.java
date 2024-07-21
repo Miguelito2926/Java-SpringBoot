@@ -2,20 +2,16 @@ package com.ednaldo.ecommerce.domain.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_cliente")
 public class Cliente implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -26,13 +22,10 @@ public class Cliente implements Serializable {
     @Column(length = 100)
     private String nome;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos = new HashSet<>();
 
     public Cliente(){}
-
-    public Cliente(String outroCliente) {
-    }
 
     public Cliente(Long id, String nome) {
         this.id = id;
@@ -57,5 +50,14 @@ public class Cliente implements Serializable {
 
     public Set<Pedido> getPedidos() {
         return pedidos;
+    }
+
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", pedidos=" + pedidos +
+                '}';
     }
 }

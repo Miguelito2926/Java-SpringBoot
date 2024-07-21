@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_pedido")
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -31,7 +29,7 @@ public class Pedido implements Serializable {
     @Column(name = "data_pedido")
     private LocalDate dataPedido;
 
-    @Column(name = "valor_total", length = 20, precision = 2)
+    @Column(name = "total", precision = 7, scale = 2)
     private BigDecimal total;
 
     @OneToMany(mappedBy = "pedido")
@@ -75,5 +73,14 @@ public class Pedido implements Serializable {
     public Pedido setTotal(BigDecimal total) {
         this.total = total;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Pedido{" +
+                "id=" + id +
+                ", dataPedido=" + dataPedido +
+                ", total=" + total +
+                '}';
     }
 }

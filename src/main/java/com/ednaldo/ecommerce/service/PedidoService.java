@@ -1,5 +1,7 @@
 package com.ednaldo.ecommerce.service;
 
+import com.ednaldo.ecommerce.domain.dto.InfoItemPedidoDTO;
+import com.ednaldo.ecommerce.domain.dto.InfoPedidoDTO;
 import com.ednaldo.ecommerce.domain.dto.ItemPedidoDTO;
 import com.ednaldo.ecommerce.domain.dto.PedidoDTO;
 import com.ednaldo.ecommerce.domain.entity.Cliente;
@@ -10,13 +12,15 @@ import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
 import com.ednaldo.ecommerce.domain.repository.ItemPedidoRepository;
 import com.ednaldo.ecommerce.domain.repository.PedidoRepository;
 import com.ednaldo.ecommerce.domain.repository.ProdutoRepository;
+import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
 import com.ednaldo.ecommerce.exception.RegraNegocioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +53,7 @@ public class PedidoService {
         List<ItemPedido> itemPedido = converterItems(pedido, pedidoDTO.getItems());
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedido);
-        pedido.setItemPedidos(itemPedido);
+        pedido.setItens(itemPedido);
         return pedido;
     }
 
@@ -66,5 +70,36 @@ public class PedidoService {
             itemPedido.setProduto(produto);
             return itemPedido;
         }).collect(Collectors.toList());
+    }
+
+    public InfoPedidoDTO obterPedidoCompleto(Long id) {
+        return pedidoRepository.findByIdFetchItem(id)
+                .map(p -> converte(p) )
+                .orElseThrow(() -> new ObjetoNotFoundException("Pedido não econtrado."));
+    }
+
+    private InfoPedidoDTO converte(Pedido pedido) {
+     return  InfoPedidoDTO.builder()
+                .codigo(pedido.getId())
+                .dataPedido(pedido.getDataPedido().toString())
+                .nome(pedido.getCliente().getNome())
+                .cpf(pedido.getCliente().getCpf())
+                .total(pedido.getTotal())
+                .infoItemPedidosDTO(converter(pedido.getItens()))
+                .build();
+
+    }
+
+    public List<InfoItemPedidoDTO> converter(List<ItemPedido> itens) {
+        if (CollectionUtils.isEmpty(itens)) {
+            return Collections.emptyList();
+        }
+        return itens.stream().map(itemPedido -> InfoItemPedidoDTO.builder()
+                .descrição(itemPedido.getProduto().getDescricao())
+                .precoUnitario(itemPedido.getProduto().getPreco())
+                .quantidade(itemPedido.getQuantidade())
+                .build()
+        ).collect(Collectors.toList());
+
     }
 }

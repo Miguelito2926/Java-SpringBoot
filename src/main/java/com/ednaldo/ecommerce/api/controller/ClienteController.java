@@ -2,6 +2,8 @@ package com.ednaldo.ecommerce.api.controller;
 
 import com.ednaldo.ecommerce.domain.entity.Cliente;
 import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
+import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -43,9 +44,9 @@ public class ClienteController {
     }
 
     @GetMapping(value = "/{id}")
-    public Cliente getClienteById(@PathVariable Long id) {
+    public Cliente getClienteById(@PathVariable Long id) throws NotFoundException {
         return clienteRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
+                .orElseThrow(() -> new ObjetoNotFoundException("Cliente não encontrado"));
     }
 
     @PostMapping
@@ -62,7 +63,7 @@ public class ClienteController {
                     clienteRepository.delete(cliente);
                     return cliente;  // Precisa retornar algo para que o lambda funcione corretamente
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+                .orElseThrow(() -> new ObjetoNotFoundException("Cliente não encontrado"));
     }
 
     @PutMapping(value = "/{id}")
@@ -74,6 +75,6 @@ public class ClienteController {
                     cliente.setId(clienteExistente.getId());
                     clienteRepository.save(cliente);
                     return clienteExistente;
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!"));
+                }).orElseThrow(() -> new ObjetoNotFoundException("Cliente não encontrado"));
     }
 }

@@ -2,6 +2,7 @@ package com.ednaldo.ecommerce.api.controller;
 
 import com.ednaldo.ecommerce.domain.entity.Produto;
 import com.ednaldo.ecommerce.domain.repository.ProdutoRepository;
+import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -56,7 +57,7 @@ public class ProdutoController {
     @ResponseStatus(OK)
     public Produto findById(@PathVariable Long id) {
         return produtoRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .orElseThrow(() -> new ObjetoNotFoundException("Produto não encontrado"));
     }
 
     @DeleteMapping(value = "/{id}")
@@ -67,7 +68,7 @@ public class ProdutoController {
                     produtoRepository.delete(produto);
                     return Void.TYPE;
                 })
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                .orElseThrow(() ->  new ObjetoNotFoundException("Produto não encontrado"));
     }
 
     @PutMapping(value = "/{id}")
@@ -78,6 +79,6 @@ public class ProdutoController {
                     produto.setId(produtoExistente.getId());
                     produtoRepository.save(produto);
                     return produtoExistente;
-                }).orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                }).orElseThrow( () ->  new ObjetoNotFoundException("Produto não encontrado"));
     }
 }

@@ -50,6 +50,5 @@ public class Pedido implements Serializable {
 
     @Getter
     @OneToMany(mappedBy = "pedido")
-    private List<ItemPedido> itemPedidos;
-
+    private List<ItemPedido> itens;
 }

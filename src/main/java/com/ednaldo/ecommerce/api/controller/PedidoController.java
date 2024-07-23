@@ -24,4 +24,8 @@ public class PedidoController {
         Pedido pedido = pedidoService.insert(pedidoDTO);
         return pedido.getId();
     }
+    public void testeDevTools() {
+
+    }
+
 }

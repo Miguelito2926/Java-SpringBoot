@@ -37,7 +37,7 @@ public class PedidoService {
 
     @Transactional
     public Pedido insert(PedidoDTO pedidoDTO) {
-        Long idCliente = pedidoDTO.getClienteId();
+        Long idCliente = pedidoDTO.getCliente();
         Cliente cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new RegraNegocioException("Código do cliente inválido."));
 
@@ -49,7 +49,7 @@ public class PedidoService {
         List<ItemPedido> itemPedido = converterItems(pedido, pedidoDTO.getItems());
         pedidoRepository.save(pedido);
         itemPedidoRepository.saveAll(itemPedido);
-        pedido.setItemPedidos(new HashSet<>(itemPedido));
+        pedido.setItemPedidos(itemPedido);
         return pedido;
     }
 
@@ -58,7 +58,7 @@ public class PedidoService {
             throw new RegraNegocioException("Não é possivel realizar um pedido sem  items.");
         }
         return items.stream().map(dtoItem -> {
-            Long idProduto = dtoItem.getProdutoId();
+            Long idProduto = dtoItem.getProduto();
             Produto produto = produtoRepository.findById(idProduto).orElseThrow(() -> new RegraNegocioException("Código do produto inválido: " + idProduto));
             ItemPedido itemPedido = new ItemPedido();
             itemPedido.setQuantidade(dtoItem.getQuantidade());

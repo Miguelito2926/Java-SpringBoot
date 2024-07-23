@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -49,6 +50,6 @@ public class Pedido implements Serializable {
 
     @Getter
     @OneToMany(mappedBy = "pedido")
-    private Set<ItemPedido> itemPedidos = new HashSet<>();
+    private List<ItemPedido> itemPedidos;
 
 }

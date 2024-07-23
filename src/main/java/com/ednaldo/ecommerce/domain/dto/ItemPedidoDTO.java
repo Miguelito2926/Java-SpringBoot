@@ -13,6 +13,6 @@ import lombok.ToString;
 @ToString
 
 public class ItemPedidoDTO {
-    private Long produtoId;
+    private Long produto;
     private Integer quantidade;
 }

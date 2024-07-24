@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -28,7 +30,7 @@ public class PedidoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Long insertPedido(@RequestBody PedidoDTO pedidoDTO) {
+    public Long insertPedido(@RequestBody @Valid PedidoDTO pedidoDTO) {
         Pedido pedido = pedidoService.insert(pedidoDTO);
         return pedido.getId();
     }

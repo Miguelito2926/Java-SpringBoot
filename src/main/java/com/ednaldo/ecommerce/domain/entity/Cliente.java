@@ -35,11 +35,11 @@ public class Cliente implements Serializable {
     private Long id;
 
     @Column(length = 100)
-    @NotEmpty(message = "Nome do cliente é obrigatório")
+    @NotEmpty(message = "Nome do cliente é obrigatório.")
     private String nome;
 
-    @NotEmpty(message = "Nome do cliente é obrigatório")
-    @CPF(message = "Informe um CPF válido")
+    @NotEmpty(message = "Nome do cliente é obrigatório.")
+    @CPF(message = "Informe um CPF válido.")
     @Column(length = 11)
     private String cpf;
 

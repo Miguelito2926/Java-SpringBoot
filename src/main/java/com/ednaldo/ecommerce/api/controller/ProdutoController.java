@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
+
 import static org.springframework.http.HttpStatus.*;
 
 import java.util.List;
@@ -49,7 +52,7 @@ public class ProdutoController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Produto insertProduto(@RequestBody Produto produto) {
+    public Produto insertProduto(@RequestBody @Valid Produto produto) {
         return produtoRepository.save(produto);
     }
 
@@ -73,7 +76,7 @@ public class ProdutoController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProduto(@PathVariable Long id, @RequestBody Produto produto) {
+    public void updateProduto(@PathVariable Long id, @RequestBody @Valid Produto produto) {
         produtoRepository.findById(id)
                 .map(produtoExistente -> {
                     produto.setId(produtoExistente.getId());

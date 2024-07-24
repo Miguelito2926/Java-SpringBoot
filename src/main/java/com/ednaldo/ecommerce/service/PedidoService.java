@@ -90,7 +90,6 @@ public class PedidoService {
                 .status(pedido.getStatus().name())
                 .infoItemPedidosDTO(converter(pedido.getItens()))
                 .build();
-
     }
 
     public List<InfoItemPedidoDTO> converter(List<ItemPedido> itens) {
@@ -103,6 +102,14 @@ public class PedidoService {
                 .quantidade(itemPedido.getQuantidade())
                 .build()
         ).collect(Collectors.toList());
+    }
 
+    @Transactional
+    public void updateStatus(Long id, StatusPedido statusPedido) {
+        pedidoRepository.findById(id).map(
+                pedido -> {
+                    pedido.setStatus(statusPedido);
+                    return pedidoRepository.save(pedido);
+                }).orElseThrow( () -> new ObjetoNotFoundException("Pedido não encontrado"));
     }
 }

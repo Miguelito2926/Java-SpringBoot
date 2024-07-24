@@ -76,11 +76,11 @@ public class PedidoService {
 
     public InfoPedidoDTO obterPedidoCompleto(Long id) {
         return pedidoRepository.findByIdFetchItem(id)
-                .map(p -> converte(p) )
+                .map(p -> convertePedidoToInfoPeditoDTO(p) )
                 .orElseThrow(() -> new ObjetoNotFoundException("Pedido não econtrado."));
     }
 
-    private InfoPedidoDTO converte(Pedido pedido) {
+    private InfoPedidoDTO convertePedidoToInfoPeditoDTO(Pedido pedido) {
      return  InfoPedidoDTO.builder()
                 .codigo(pedido.getId())
                 .dataPedido(pedido.getDataPedido().toString())
@@ -88,11 +88,11 @@ public class PedidoService {
                 .cpf(pedido.getCliente().getCpf())
                 .total(pedido.getTotal())
                 .status(pedido.getStatus().name())
-                .infoItemPedidosDTO(converter(pedido.getItens()))
+                .infoItemPedidosDTO(converterItemPedidoToDTO(pedido.getItens()))
                 .build();
     }
 
-    public List<InfoItemPedidoDTO> converter(List<ItemPedido> itens) {
+    public List<InfoItemPedidoDTO> converterItemPedidoToDTO(List<ItemPedido> itens) {
         if (CollectionUtils.isEmpty(itens)) {
             return Collections.emptyList();
         }

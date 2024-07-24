@@ -5,10 +5,8 @@ import com.ednaldo.ecommerce.domain.dto.PedidoDTO;
 import com.ednaldo.ecommerce.domain.dto.UpdateStatusPedidoDTO;
 import com.ednaldo.ecommerce.domain.entity.Pedido;
 import com.ednaldo.ecommerce.domain.enums.StatusPedido;
-import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
 import com.ednaldo.ecommerce.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping(value = "api/v1/pedidos")

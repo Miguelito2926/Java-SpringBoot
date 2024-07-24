@@ -8,6 +8,7 @@ import com.ednaldo.ecommerce.domain.entity.Cliente;
 import com.ednaldo.ecommerce.domain.entity.ItemPedido;
 import com.ednaldo.ecommerce.domain.entity.Pedido;
 import com.ednaldo.ecommerce.domain.entity.Produto;
+import com.ednaldo.ecommerce.domain.enums.StatusPedido;
 import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
 import com.ednaldo.ecommerce.domain.repository.ItemPedidoRepository;
 import com.ednaldo.ecommerce.domain.repository.PedidoRepository;
@@ -49,6 +50,7 @@ public class PedidoService {
         pedido.setTotal(pedidoDTO.getTotal());
         pedido.setDataPedido(LocalDate.now());
         pedido.setCliente(cliente);
+        pedido.setStatus(StatusPedido.APROVADO);
 
         List<ItemPedido> itemPedido = converterItems(pedido, pedidoDTO.getItems());
         pedidoRepository.save(pedido);
@@ -85,6 +87,7 @@ public class PedidoService {
                 .nome(pedido.getCliente().getNome())
                 .cpf(pedido.getCliente().getCpf())
                 .total(pedido.getTotal())
+                .status(pedido.getStatus().name())
                 .infoItemPedidosDTO(converter(pedido.getItens()))
                 .build();
 

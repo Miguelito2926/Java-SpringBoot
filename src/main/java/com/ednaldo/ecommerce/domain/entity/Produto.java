@@ -32,11 +32,11 @@ public class Produto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Descrição do produto é obrigatória.")
+    @NotEmpty(message = "{campo.descricao.obrigatorio}")
     private String descricao;
 
     @Column(name = "preco_unitario")
-    @NotNull(message = "Campo preço é obrigatório.")
+    @NotNull(message = "{campo.preco.obrigatorio}")
     private BigDecimal preco;
 
 }

@@ -17,13 +17,13 @@ import java.util.List;
 
 public class PedidoDTO {
 
-    @NotNull(message = "Informe o código do cliente.")
+    @NotNull(message = "{campo.codigo-cliente.obrigatorio}")
     private Long cliente;
 
-    @NotNull(message = "Campo total do pedido é obrigatório.")
+    @NotNull(message = "{campo.total-pedido.obrigatorio}")
     private BigDecimal total;
 
-    @NotEmptyList(message = "O pedido não pode ser concluído sem itens.")
+    @NotEmptyList(message = "{campo.items-pedido.obrigatorio}")
     private List<ItemPedidoDTO> items;
 
     public PedidoDTO(Long cliente, BigDecimal total, List<ItemPedidoDTO> items) {

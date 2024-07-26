@@ -1,20 +1,22 @@
 package com.ednaldo.ecommerce.config;
 
-import com.ednaldo.ecommerce.service.UserService;
+import com.ednaldo.ecommerce.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserService userService;
+    private UsuarioService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,6 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyRole("ADMIN")
                 .antMatchers("api/v1/pedidos/**")
                 .hasAnyRole("USER","ADMIN")
+                .antMatchers(HttpMethod.POST, "api/v1/usuarios/**")
+                .permitAll()
+                .anyRequest().authenticated()
                 .and().httpBasic();
         ;
     }

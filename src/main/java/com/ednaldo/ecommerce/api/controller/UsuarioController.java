@@ -2,7 +2,7 @@ package com.ednaldo.ecommerce.api.controller;
 
 import com.ednaldo.ecommerce.domain.entity.Usuario;
 import com.ednaldo.ecommerce.service.UsuarioService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,14 +15,12 @@ import javax.validation.Valid;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService usuarioService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     @ResponseStatus(CREATED)

@@ -3,7 +3,7 @@ package com.ednaldo.ecommerce.api.controller;
 import com.ednaldo.ecommerce.domain.entity.Produto;
 import com.ednaldo.ecommerce.domain.repository.ProdutoRepository;
 import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -25,11 +25,11 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "api/v1/produtos")
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    private final ProdutoRepository produtoRepository;
 
     @GetMapping
     @ResponseStatus(OK)

@@ -2,6 +2,7 @@ package com.ednaldo.ecommerce.service;
 
 import com.ednaldo.ecommerce.domain.entity.Usuario;
 import com.ednaldo.ecommerce.domain.repository.UsuarioRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,13 +14,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class UsuarioService implements UserDetailsService {
 
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final PasswordEncoder encoder;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {

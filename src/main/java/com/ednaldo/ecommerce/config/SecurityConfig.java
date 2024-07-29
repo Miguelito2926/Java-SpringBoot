@@ -1,32 +1,47 @@
 package com.ednaldo.ecommerce.config;
 
+import com.ednaldo.ecommerce.security.jwt.JwtAuthFilter;
+import com.ednaldo.ecommerce.security.jwt.JwtService;
 import com.ednaldo.ecommerce.service.UsuarioService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Lazy
     @Autowired
-    private UsuarioService userService;
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public OncePerRequestFilter jwtFilter() {
+        return new JwtAuthFilter(jwtService, usuarioService);
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder authentication) throws Exception {
         authentication
-                .userDetailsService(userService)
+                .userDetailsService(usuarioService)
                 .passwordEncoder(passwordEncoder());
     }
 
@@ -43,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "api/v1/usuarios/**")
                 .permitAll()
                 .anyRequest().authenticated()
-                .and().httpBasic();
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         ;
     }
 }

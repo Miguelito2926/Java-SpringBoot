@@ -4,7 +4,7 @@ import com.ednaldo.ecommerce.domain.entity.Cliente;
 import com.ednaldo.ecommerce.domain.repository.ClienteRepository;
 import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
 import javassist.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
@@ -22,10 +22,11 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/v1/clientes")
 public class ClienteController {
-    @Autowired
-    private ClienteRepository clienteRepository;
+
+    private final ClienteRepository clienteRepository;
 
     @GetMapping
     public List<Cliente> findAll() {

@@ -15,7 +15,7 @@ import com.ednaldo.ecommerce.domain.repository.PedidoRepository;
 import com.ednaldo.ecommerce.domain.repository.ProdutoRepository;
 import com.ednaldo.ecommerce.exception.ObjetoNotFoundException;
 import com.ednaldo.ecommerce.exception.RegraNegocioException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -25,20 +25,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @Service
+@RequiredArgsConstructor
 public class PedidoService {
 
-    @Autowired
-    private PedidoRepository pedidoRepository;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private ItemPedidoRepository itemPedidoRepository;
+    private final PedidoRepository pedidoRepository;
+    private final ClienteRepository clienteRepository;
+    private final ProdutoRepository produtoRepository;
+    private final ItemPedidoRepository itemPedidoRepository;
 
     @Transactional
     public Pedido insert(PedidoDTO pedidoDTO) {

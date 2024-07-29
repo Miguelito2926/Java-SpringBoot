@@ -1,5 +1,7 @@
 package com.ednaldo.ecommerce.api.controller;
 
+import com.ednaldo.ecommerce.domain.dto.CredenciaisDTO;
+import com.ednaldo.ecommerce.domain.dto.TokenDTO;
 import com.ednaldo.ecommerce.domain.entity.Usuario;
 import com.ednaldo.ecommerce.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +24,18 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
 
+
     @PostMapping
     @ResponseStatus(CREATED)
     public Usuario insert(@RequestBody @Valid Usuario usuario) {
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
         return usuarioService.createUsuario(usuario);
+    }
+
+    @PostMapping(value = "/auth")
+    @ResponseStatus(CREATED)
+    public TokenDTO getToken(@RequestBody CredenciaisDTO credenciaisDTO) {
+        return usuarioService.autenticar(credenciaisDTO);
     }
 }

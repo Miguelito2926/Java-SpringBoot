@@ -23,3 +23,11 @@ produto_id  Integer references produto(id),
 quantidade Integer
 );
 
+create table usuario(
+id Integer primary key auto_increment,
+login varchar(50) not null,
+senha varchar(255) not null,
+admin  BOOL default false
+);
+
+

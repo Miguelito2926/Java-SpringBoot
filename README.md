@@ -55,9 +55,6 @@ A documentação completa da API está disponível no Swagger, que pode ser aces
 
 http://localhost:8080/swagger-ui.html
 
-markdown
-Copiar código
-
 ## Segurança
 
 A API utiliza **Spring Security** com **JWT** para autenticação e autorização. Para acessar determinados endpoints, é necessário fornecer um token JWT válido. Para obter um token, utilize o endpoint de autenticação:
